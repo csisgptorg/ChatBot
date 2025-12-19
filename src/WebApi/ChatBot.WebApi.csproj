@@ -6,7 +6,8 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../Application/ChatBot.Application.csproj" />
-    <ProjectReference Include="../Infrastructure/ChatBot.Infrastructure.csproj" />
+    <ProjectReference Include="../Persistence/ChatBot.Persistence.csproj" />
+    <ProjectReference Include="../Services/ChatBot.Services.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />

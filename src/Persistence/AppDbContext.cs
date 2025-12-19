@@ -5,7 +5,7 @@ using System.Reflection;
 using ChatBot.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace ChatBot.Infrastructure
+namespace ChatBot.Persistence
 {
     /// <summary>
     /// DbContext that discovers entity types and DbSets via reflection to reduce manual wiring.

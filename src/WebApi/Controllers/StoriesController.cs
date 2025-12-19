@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ChatBot.Application.Mapping;
 using ChatBot.Domain.Entities;
-using ChatBot.Infrastructure;
+using ChatBot.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace ChatBot.API.Controllers
+namespace ChatBot.WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
