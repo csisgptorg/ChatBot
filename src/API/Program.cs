@@ -1,7 +1,6 @@
 using System.Reflection;
 using AutoMapper;
 using ChatBot.Application.Mapping;
-using ChatBot.Application.Services;
 using ChatBot.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -11,15 +10,12 @@ using Microsoft.Extensions.Hosting;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddMemoryCache();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     // Plug your provider here; using InMemory for demo purposes.
     options.UseInMemoryDatabase("chatbot");
 });
-
-builder.Services.AddScoped<StoryService>();
 
 builder.Services.AddSingleton<IMapper>(_ =>
 {

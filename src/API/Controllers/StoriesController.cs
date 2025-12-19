@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using ChatBot.Application.Dto;
 using ChatBot.Application.Mapping;
-using ChatBot.Application.Services;
 using ChatBot.Domain.Entities;
 using ChatBot.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
@@ -18,18 +17,32 @@ namespace ChatBot.API.Controllers
     {
         private readonly AppDbContext _dbContext;
         private readonly IMapper _mapper;
-        private readonly StoryService _storyService;
 
-        public StoriesController(AppDbContext dbContext, IMapper mapper, StoryService storyService)
+        public StoriesController(AppDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
-            _storyService = storyService;
         }
 
-        [HttpGet("feed")]
-        public async Task<ActionResult<FeedResponseDto>> GetFeed([FromQuery] Guid userId, [FromQuery] Guid? categoryId)
-            => Ok(await _storyService.GetFeedAsync(userId, categoryId));
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<StoryDto>>> Get()
+        {
+            var stories = await _dbContext.Query<Story>()
+                .Include(x => x.Category)
+                .AsNoTracking()
+                .ToListAsync();
+
+            var dto = _mapper.Map<IEnumerable<StoryDto>>(stories.Select(s => new StoryDto
+            {
+                Id = s.Id,
+                Title = s.Title,
+                StoryType = s.StoryType,
+                MediaUrl = s.MediaUrl,
+                CategoryName = s.Category?.Name
+            }));
+
+            return Ok(dto);
+        }
 
         [HttpPost]
         public async Task<ActionResult<StoryDto>> Create([FromBody] StoryDto request)
@@ -60,29 +73,5 @@ namespace ChatBot.API.Controllers
             dto.CategoryName = story.Category?.Name;
             return Ok(dto);
         }
-
-        [HttpPost("{id}/download")]
-        public async Task<ActionResult<StoryActionResultDto>> Download(Guid id, [FromQuery] Guid userId)
-            => Ok(await _storyService.DownloadStoryAsync(userId, id));
-
-        [HttpPost("{id}/like")]
-        public async Task<ActionResult<StoryActionResultDto>> Like(Guid id, [FromQuery] Guid userId, [FromQuery] bool remind = false)
-            => Ok(await _storyService.LikeStoryAsync(userId, id, remind));
-
-        [HttpPost("{id}/schedule")]
-        public async Task<ActionResult<ScheduledStory>> Schedule(Guid id, [FromQuery] Guid userId, [FromBody] ScheduleStoryRequest request)
-        {
-            if (request.StoryId == Guid.Empty)
-            {
-                request.StoryId = id;
-            }
-
-            var scheduled = await _storyService.ScheduleStoryAsync(userId, request);
-            return Ok(scheduled);
-        }
-
-        [HttpPost("categories/{categoryId}/click")]
-        public async Task<ActionResult<Category>> RegisterCategoryClick(Guid categoryId)
-            => Ok(await _storyService.RegisterCategoryClickAsync(categoryId));
     }
 }

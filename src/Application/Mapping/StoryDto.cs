@@ -11,9 +11,5 @@ namespace ChatBot.Application.Mapping
         public StoryType StoryType { get; set; }
         public string MediaUrl { get; set; } = string.Empty;
         public string? CategoryName { get; set; }
-        public bool AllowBranding { get; set; }
-        public bool IsInteractive { get; set; }
-        public bool IsExclusiveContent { get; set; }
-        public DateTime? ScheduledAtUtc { get; set; }
     }
 }
