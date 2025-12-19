@@ -4,6 +4,7 @@ using ChatBot.Application.Mapping;
 using ChatBot.Application.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MediatR;
 
 namespace ChatBot.Application;
 
@@ -18,6 +19,7 @@ public static class DependencyInjection
         };
 
         services.AddSingleton<IMapper>(_ => ReflectionMappingConfig.BuildMapper(assemblies));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(assemblies));
         services.AddScoped<StoryService>();
 
         return services;
