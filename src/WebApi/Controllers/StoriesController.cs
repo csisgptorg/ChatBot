@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using ChatBot.Application.Mapping;
-using ChatBot.Domain.Entities;
-using ChatBot.Persistence;
+using ChatBot.Application.Stories.Commands.CreateStory;
+using ChatBot.Application.Stories.Queries.GetStories;
+using ChatBot.Application.Stories.Queries.GetStoryById;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using MediatR;
 
 namespace ChatBot.WebApi.Controllers
 {
@@ -15,63 +14,45 @@ namespace ChatBot.WebApi.Controllers
     [Route("api/[controller]")]
     public class StoriesController : ControllerBase
     {
-        private readonly AppDbContext _dbContext;
-        private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
-        public StoriesController(AppDbContext dbContext, IMapper mapper)
+        public StoriesController(IMediator mediator)
         {
-            _dbContext = dbContext;
-            _mapper = mapper;
+            _mediator = mediator;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<StoryDto>>> Get()
+        public async Task<ActionResult<IEnumerable<StoryDto>>> Get([FromQuery] int maxItems = 25)
         {
-            var stories = await _dbContext.Query<Story>()
-                .Include(x => x.Category)
-                .AsNoTracking()
-                .ToListAsync();
-
-            var dto = _mapper.Map<IEnumerable<StoryDto>>(stories.Select(s => new StoryDto
-            {
-                Id = s.Id,
-                Title = s.Title,
-                StoryType = s.StoryType,
-                MediaUrl = s.MediaUrl,
-                CategoryName = s.Category?.Name
-            }));
-
-            return Ok(dto);
+            var stories = await _mediator.Send(new GetStoriesQuery(maxItems));
+            return Ok(stories);
         }
 
         [HttpPost]
         public async Task<ActionResult<StoryDto>> Create([FromBody] StoryDto request)
         {
-            var story = _mapper.Map<Story>(request);
-            story.OwnerId = Guid.Empty; // plug real user context
+            var command = new CreateStoryCommand(
+                request.Title,
+                request.StoryType,
+                request.MediaUrl,
+                request.CategoryId,
+                Guid.Empty);
 
-            _dbContext.Add(story);
-            await _dbContext.SaveChangesAsync();
-
-            var response = _mapper.Map<StoryDto>(story);
-            return CreatedAtAction(nameof(GetById), new { id = story.Id }, response);
+            var response = await _mediator.Send(command);
+            return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<StoryDto>> GetById(Guid id)
         {
-            var story = await _dbContext.Query<Story>()
-                .Include(x => x.Category)
-                .FirstOrDefaultAsync(x => x.Id == id);
+            var story = await _mediator.Send(new GetStoryByIdQuery(id));
 
             if (story == null)
             {
                 return NotFound();
             }
 
-            var dto = _mapper.Map<StoryDto>(story);
-            dto.CategoryName = story.Category?.Name;
-            return Ok(dto);
+            return Ok(story);
         }
     }
 }
