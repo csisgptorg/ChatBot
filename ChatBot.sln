@@ -6,9 +6,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.Domain", "src/Domai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.Application", "src/Application/ChatBot.Application.csproj", "{2E2FE4AA-3D04-42C6-BC5E-4872F954E628}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.Infrastructure", "src/Infrastructure/ChatBot.Infrastructure.csproj", "{FD9C205D-E239-430F-B02F-8C25CF5D519C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.Persistence", "src/Persistence/ChatBot.Persistence.csproj", "{FD9C205D-E239-430F-B02F-8C25CF5D519C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.API", "src/API/ChatBot.API.csproj", "{A2550D0E-AF0A-4C13-9C77-73ED9B5E07DA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.WebApi", "src/WebApi/ChatBot.WebApi.csproj", "{A2550D0E-AF0A-4C13-9C77-73ED9B5E07DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBot.Services", "src/Services/ChatBot.Services.csproj", "{3F56FE1C-99E0-404C-AFC5-CCFA536C25B1}"
 EndProject
 Global
 GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +34,10 @@ GlobalSection(ProjectConfigurationPlatforms) = postSolution
 {A2550D0E-AF0A-4C13-9C77-73ED9B5E07DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 {A2550D0E-AF0A-4C13-9C77-73ED9B5E07DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 {A2550D0E-AF0A-4C13-9C77-73ED9B5E07DA}.Release|Any CPU.Build.0 = Release|Any CPU
+{3F56FE1C-99E0-404C-AFC5-CCFA536C25B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+{3F56FE1C-99E0-404C-AFC5-CCFA536C25B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+{3F56FE1C-99E0-404C-AFC5-CCFA536C25B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+{3F56FE1C-99E0-404C-AFC5-CCFA536C25B1}.Release|Any CPU.Build.0 = Release|Any CPU
 EndGlobalSection
 GlobalSection(SolutionProperties) = preSolution
 HideSolutionNode = FALSE

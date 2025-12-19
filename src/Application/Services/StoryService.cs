@@ -8,7 +8,7 @@ using ChatBot.Application.Dto;
 using ChatBot.Application.Mapping;
 using ChatBot.Application.Policies;
 using ChatBot.Domain.Entities;
-using ChatBot.Infrastructure;
+using ChatBot.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChatBot.Application.Services
